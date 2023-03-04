@@ -36,13 +36,20 @@
       <sety-statement> |
       <setxy-statement> |
       HOME
+
 <forward-statement> ::=  (FORWARD | FD) <expression>
+
 <backward-statement> ::= (BACKWARD | BK) <expression>
+
 <right-statement> ::= (RIGHT | RT) <expression>
+
 <left-statement> ::= (LEFT | LT) <expression>
+
 <setx-statement> ::= SETX <expression>
+
 <sety-statement> ::= SETY <expression>
-<setxy-statement> ::= SETXY <expression> <expression>
+
+<setxy-statement> ::= SETXY <expression> ',' <expression>
 
 <drawing-statement> :=
   <clear-statement> |
@@ -52,50 +59,64 @@
   <pendown-statement> |
   <color-statement> |
   <penwidth-statement>
+  
 <clear-statement> ::= (CLEAR | CLS)
+
 <circle-statement> ::= CIRCLE <expression>
+
 <arc-statement> ::= ARC <expression>
+
 <penup-statement> ::= (PENUP | PU)
+
 <pendown-statement> ::= (PENDOWN | PD)
-<color-statement> ::= COLOR <expression> <expression> <expression>
+
+<color-statement> ::= COLOR <expression> ',' <expression> ',' <expression>
+
 <penwidth-statement> ::= PENWIDTH <expression>
 
 <text-statement> ::= PRINT '[' <element> <element-list> ']'
+
 element := <string> | <expression>
+
 <element-list> := ',' <element> <element-list>
 <element-list> := ' '
 
 <structured-statement> ::=
   <repetitive-statement> |
   <conditional-statement>
+
 <repetitive-statement> ::= 
   REPEAT <expression> '[' <statement-sequence> ']'
+
 conditional-statement ::=
   <if-statement> |
   <if-else-statement>
+  
 <if-statement> ::= 
-  IF <expression> '[' <if-true> ']'
+  IF <expression> '[' <statement-sequence> ']'
+  
 <if-else-statement> ::= 
-  IFELSE <expression> '[' <if-true> ']' '[' <if-false> ']'
-<if-true> ::= <statement-sequence>
-<if-false> ::= <statement-sequence>
+  IFELSE <expression> '[' <statement-sequence> ']' '[' <statement-sequence> ']'
 
 <expression> ::= <conditional-expression>
 
 <conditional-expression> ::= 
 	<conditional-term> <extended-conditional-expression>
+	
 <extended-conditional-expression> ::=
 	OR <conditional-term> <extended-conditional-expression>
 <extended-conditional-expression> ::= ' '
 
 <conditional-term> ::= 
 	<equality-expression> <extended-conditional-term>
+	
 <extended-conditional-term> ::= 
 	AND <equality-expression> <extended-conditional-term>
 <extended-boolean-term> ::= ' '
 
 <equality-expression> ::=
 	<relational-expression> <extended-equality-expression>
+	
 <extended-equality-expression> := 
 	'=' <relational-expression> <extended-equality-expression>
 <extended-equality-expression> := 
@@ -104,6 +125,7 @@ conditional-statement ::=
 
 <relational-expression> ::= 
 	<additive-expression> <extended-relational-expression>
+	
 <extended-relational-expression> :=
 	'<' <additive-expression> <extended-relational-expression>
 <extended-relational-expression> ::=
@@ -116,6 +138,7 @@ conditional-statement ::=
 	
 <additive-expression> ::= 
 	<multiplicative-expression> <extended-additive-expression>
+	
 <extended-additive-expression> ::=
 	'+'  <multiplicative-expression> <extended-additive-expression>
 <extended-additive-expression> ::=
@@ -124,6 +147,7 @@ conditional-statement ::=
 	
 <multiplicative-expression> ::=
 	<unary-expression> <extended-multiplicative-expression>
+	
 <extended-multiplicative-expression> ::=
 	'*' <unary-expression> <extended-multiplicative-expression>
 <extended-multiplicative-expression> ::=

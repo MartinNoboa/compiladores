@@ -18,6 +18,32 @@ class Tag(Enum):
 	## RESERVED WORDS ##
 	VAR = 457
 	FORWARD = 548
+	FD = 548
+	BACKWARD= 549
+	BK= 549
+	RIGHT= 550
+	RT= 550
+	LEFT= 551
+	LT= 551
+	SETX = 552
+	SETXY =553
+	CLEAR =554 
+	CLS= 554
+	CIRCLE=555 
+	ARC= 556
+	PENUP = 557
+	PU= 557
+	PENDOWN = 558
+	PD= 558
+	COLOR = 559
+	PENWIDTH= 560 
+	PRINT= 561
+	REPEAT= 562
+	IF = 563
+	IFELSE = 564 
+	OR = 565
+	AND = 566
+	MOD= 567
 	
 class Token:
 	__tag = Tag.EOF
@@ -41,8 +67,6 @@ class Token:
 			return "Token - value TRUE"
 		elif self.__tag == Tag.FALSE:
 			return "Token - value FALSE"
-		elif self.__tag == Tag.VAR:
-			return "Token - value VAR"
 		else:
 			return "TOKEN - value " + chr(self.__tag)
 			
@@ -109,6 +133,31 @@ class Lexer:
 		self.__words["FORWARD"] = Word(Tag.FORWARD, "FORWARD")
 		self.__words["FD"] = Word(Tag.FORWARD, "FORWARD")
 		## ADD ALL RESERVED WORDS ##
+		self.__words["BACKWARD"] = Word(Tag.BACKWARD, "BACKWARD")
+		self.__words["BK"] = Word(Tag.BACKWARD, "BACKWARD")
+		self.__words["RIGHT"] = Word(Tag.RIGHT, "RIGHT")
+		self.__words["RT"] = Word(Tag.RIGHT, "RIGHT")
+		self.__words["LEFT"] = Word(Tag.LEFT, "LEFT")
+		self.__words["LT"] = Word(Tag.LEFT, "LEFT")
+		self.__words["SETX"] = Word(Tag.SETX, "SETX")
+		self.__words["SETXY"] = Word(Tag.SETXY, "SETXY")
+		self.__words["CLEAR"] = Word(Tag.CLEAR, "CLEAR")
+		self.__words["CLS"] = Word(Tag.CLEAR, "CLEAR")
+		self.__words["CIRCLE"] = Word(Tag.CIRCLE, "CIRCLE")
+		self.__words["ARC"] = Word(Tag.ARC, "ARC")
+		self.__words["PENUP"] = Word(Tag.PENUP, "PENUP")
+		self.__words["PU"] = Word(Tag.PENUP, "PENUP")
+		self.__words["PENDOWN"] = Word(Tag.PENDOWN, "PENDOWN")
+		self.__words["PD"] = Word(Tag.PENDOWN, "PENDOWN")
+		self.__words["COLOR"] = Word(Tag.COLOR, "COLOR")
+		self.__words["PENWIDTH"] = Word(Tag.PENWIDTH, "PENWIDTH")
+		self.__words["PRINT"] = Word(Tag.PRINT, "PRINT")
+		self.__words["REPEAT"] = Word(Tag.REPEAT, "REPEAT")
+		self.__words["IF"] = Word(Tag.IF, "IF")
+		self.__words["IFELSE"] = Word(Tag.IFELSE, "IFELSE")
+		self.__words["OR"] = Word(Tag.OR, "OR")
+		self.__words["AND"] = Word(Tag.AND, "AND")
+		self.__words["MOD"] = Word(Tag.MOD, "MOD")
 
 	def read(self):
 		self.__peek = self.__input.read(1)
@@ -130,9 +179,9 @@ class Lexer:
 	
 	def scan(self):
 		self.__skipSpaces()
-
-		## ADD CODE TO SKIP COMMENTS HERE ##
-
+		if self.__peek == '%':
+			while(self.__peek != '\n'):
+				self.read()
 		if self.__peek == '<':
 			if self.readch('='):
 				return Word(Tag.LEQ, "<=")
@@ -166,20 +215,29 @@ class Lexer:
 				self.read()
 				if self.__peek == '"':
 					break
-			
 			val = val + self.__peek
 			self.read()
 			return String(val)
 
 		if self.__peek.isdigit():
+			decimal = False
+			decimalCounter = 1
 			val = 0
 			while True:
+				if decimal:
+					decimalCounter = decimalCounter * 10
 				val = (val * 10) + int(self.__peek)
 				self.read()
 				if not(self.__peek.isdigit()):
-					break
-			## ADD CODE TO PROCESS DECIMAL PART HERE ##
+					if self.__peek == '.':
+						decimal = True
+						self.read()
+					else:
+						break
+			if decimal:
+				return Number(float(val)/(decimalCounter))
 			return Number(val)
+				
 
 		if self.__peek.isalpha():
 			val = ""
