@@ -7,8 +7,7 @@ Hay 2 maneras de pasar parametros:
 
 1. Archivo de texto
 python terminal.py -f <textFile>
-Programa leera el archivo de texto, que debe tener el formato de la primera linea contiene el numero n de lineas a leer
-N lineas a procesar
+Programa leera el archivo de texto, cuya primera linea debe contener el numero n de lineas a leer seguido por la gramatica
 
 2. Input manual
 python terminal.py -i
