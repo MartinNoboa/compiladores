@@ -21,11 +21,10 @@ def main():
     
     # declare Grammar object
     grammar = Grammar(values, left, right)
-    # find terminals 
-    grammar.terminals()
-    # find print terminals and nonTerminals 
-    grammar.terminalsToString()
-    grammar.nonTerminalsToString()
+    # build 
+    grammar.build()
+    # grammar.firstsToString()
+    grammar.followsToString()
     
     
 def testAll():
@@ -39,13 +38,11 @@ def testAll():
         # declare Grammar object
         grammar = Grammar(values, left, right)
         # find terminals 
-        grammar.terminals()
-        # find print terminals and nonTerminals 
-        grammar.terminalsToString()
-        grammar.nonTerminalsToString()
+        grammar.build()
+        # grammar.firstsToString()
     
                 
 if __name__ == "__main__":
-    # main()
-    testAll()
+    main()
+    # testAll()
             

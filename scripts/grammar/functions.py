@@ -53,7 +53,9 @@ def parseContent(fileName):
     with open(fileName) as f:
         n = int(f.readline().strip())
         for i in range(n):
-            input.append(next(f).strip())
+            aux = next(f).strip()
+            input.append(aux)
+            grammar.append(aux.split()) 
             # define left and right lists 
             l = []
             r = []
@@ -87,7 +89,7 @@ def readInput():
     for i in range(n):
         line = input()
         temp = line.split()
-        grammar.append(line.split()) 
+        grammar.append(temp)
         for j in range(len(temp)):
             if j>=2:
                 r.append(temp[j])
@@ -108,8 +110,11 @@ def cleanList(list):
     """
     for i, char in enumerate(list):
         if char == "'":
-            # del list[i+1]
             list[i] = "eps"
+            # del list[i+1]
         if char == '->':
+            del list[i]
+    for i, char in enumerate(list):
+        if char == "'":
             del list[i]
     return list
