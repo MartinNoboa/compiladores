@@ -47,74 +47,52 @@ def parseContent(fileName):
     returns right and left lists
     """
     # read file values and convert to lists
+    l = []
+    r = []
     values = {}
     input = []
-    grammar = []
+    grammar = {}
     with open(fileName) as f:
         n = int(f.readline().strip())
-        for i in range(n):
-            aux = next(f).strip()
-            input.append(aux)
-            grammar.append(aux.split()) 
-            # define left and right lists 
-            l = []
-            r = []
-            for line in input:
-                temp = line.split()
-                for j in range(len(temp)):
-                    if j>=2:
-                        r.append(temp[j])
-                l.append(temp[0])
-    #clean outputs 
-    r = cleanList(r)
-    grammar = list(map(cleanList,grammar))
-    # remove doubles
-    r = list(dict.fromkeys(r))
-    l = list(dict.fromkeys(l))
-
+        for _ in range(n):
+            aux = next(f).strip().split()
+            if aux[0] not in grammar.keys():
+                grammar[aux[0]] = []
+            if "'" in aux[2:]:
+                aux.remove("'")
+                aux = list(map(lambda x: x.replace("'","eps"),aux))
+            r.append(aux[2:])
+            grammar[aux[0]].append(aux[2:])
+    
+    r = list(dict.fromkeys([item for sublist in r for item in sublist]))
+    l = list(grammar.keys())
+    
     return l,r,grammar
 
 
 def readInput():
     """
     reads input from user 
-    returns right and left lists
+    returns right and left lists and grammar dict
     """
     l = []
     r = []
-    grammar = []
+    grammar = {}
     # number of lines to read
     print("Enter number n of lines: ")
     n = int(input())
     for i in range(n):
         line = input()
         temp = line.split()
-        grammar.append(temp)
-        for j in range(len(temp)):
-            if j>=2:
-                r.append(temp[j])
-        l.append(temp[0])
-    #clean outputs 
-    r = cleanList(r)
-    grammar = list(map(cleanList,grammar))
-    # remove doubles
-    r = list(dict.fromkeys(r))
-    l = list(dict.fromkeys(l))
-
+        if temp[0] not in grammar.keys():
+            grammar[temp[0]] = []
+        if "'" in temp[2:]:
+            temp.remove("'")
+            temp = list(map(lambda x: x.replace("'","eps"),temp))
+        r.append(temp[2:])
+        grammar[temp[0]].append(temp[2:]) 
+        
+    r = list(dict.fromkeys([item for sublist in r for item in sublist]))
+    l = list(grammar.keys())
+    
     return l,r,grammar
-
-def cleanList(list):
-    """
-    change ' ' for eps and remove ->
-    returns updated list
-    """
-    for i, char in enumerate(list):
-        if char == "'":
-            list[i] = "eps"
-            # del list[i+1]
-        if char == '->':
-            del list[i]
-    for i, char in enumerate(list):
-        if char == "'":
-            del list[i]
-    return list
