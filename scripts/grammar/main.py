@@ -41,13 +41,12 @@ def testAll():
         # build object 
         grammar.build()
         # methods
-        grammar.terminalsToString()
-        grammar.nonTerminalsToString()
+        
         
         # grammar.firstsToString()
     
                 
 if __name__ == "__main__":
-    # main()
-    testAll()
+    main()
+    # testAll()
             

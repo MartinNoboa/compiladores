@@ -11,11 +11,9 @@ class Grammar:
         # terminal values
         self.__terminal = right
         # reduced grammar with all productions per non terminal
-        self.__productions = {}
         self.__firsts = {}
         self.__follows = {}
         
-    #declare methods
     
     # basics--------------------------------------------------------------------------------------------------
     def build(self):
@@ -27,20 +25,7 @@ class Grammar:
     def __terminals(self):
         self.__terminal = [char for char in self.__terminal if char not in self.__nonTerminal and char != 'eps']
         
-    def __setProductions(self):
-        # set keys of non terminal values
-        for key in self.__nonTerminal:
-            self.__productions[key] = set()
-        # set values to keys
-        for line in self.__grammar:
-            for i in line[1:]:
-                self.__productions[line[0]].add(i)
             
-    def __setFirstRecursive(self, value):
-        if value in self.__terminal:
-            return value
-        else:
-            pass
     def __setFirsts(self):
         # initialize dictionary with non terminal keys
         for key in self.__nonTerminal:
@@ -108,8 +93,6 @@ class Grammar:
             if 'eps' in lines:
                 del lines[lines.index('eps')]
             
-        
-    
     def __hasNext(self, list, value):
         return list.index(value) + 1 <= len(list) - 1
     
@@ -117,7 +100,8 @@ class Grammar:
         return list[list.index(value) + 1]
     
     def __producesEpisolon(self, key):
-        return 'eps' in self.__productions[key]
+        productions = [item for sublist in self.__grammar[key] for item in sublist]
+        return 'eps' in productions
     
     # To Strings ------------------------------------------------------------------------------------------------
     def terminalsToString(self):
@@ -131,11 +115,6 @@ class Grammar:
         for i in self.__grammar:
             for values in self.__grammar[i]:
                 print(f'' + i + ' -> ' + ' '.join(values))
-                
-    
-    def productionsToString(self):
-        for key in self.__productions:
-            print(f'' + key + " -> " + ', '.join(self.__productions[key]))
     
     def firstsToString(self):
         for key in self.__firsts:
