@@ -1,7 +1,5 @@
 
 class Grammar:
-    # declare attributes
-
     # declare constructor
     def __init__(self, values , left, right):
         # all values in the grammar
@@ -14,7 +12,6 @@ class Grammar:
         self.__firsts = {}
         self.__follows = {}
         
-    
     # basics--------------------------------------------------------------------------------------------------
     def build(self):
         self.__terminals()
@@ -109,9 +106,6 @@ class Grammar:
                 if type(i) == list:
                     self.__follows[key] = [item for sublist in self.__follows[key] for item in sublist]
             
-            # self.__follows[key] = list(dict.fromkeys(self.__follows[key]))
-        
-            
     def __hasNext(self, list, value):
         return list.index(value) + 1 <= len(list) - 1
     
@@ -150,8 +144,8 @@ class Grammar:
         print("*"*3 + " Firsts & Follows" + "*"*3)
         for key in self.__firsts:
             print(f'' + key + " => FIRSTS = {" + ', '.join(self.__firsts[key]) + "}, " + "FOLLOWS = {" + ', '.join(self.__follows[key]) + "}")
+    
     # Gets --------------------------------------------------------------------------------------------------------
-
     def __getFirsts(self, key):
         if key in self.__nonTerminal:
             return self.__firsts[key] 
