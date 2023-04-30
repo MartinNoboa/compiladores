@@ -1,0 +1,3 @@
+bexpr => FIRST = {not,(,true,false}, FOLLOW = {$,or,)}
+bterm => FIRST = {not,(,true,false}, FOLLOW = {$,or,and,)}
+bfactor => FIRST = {not,(,true,false}, FOLLOW = {$,or,and,)}
