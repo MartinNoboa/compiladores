@@ -149,7 +149,7 @@ class Grammar:
     def firstsFollowsToString(self):
         print("*"*3 + " Firsts & Follows" + "*"*3)
         for key in self.__firsts:
-            print(f'' + key + " => Firsts = {" + ', '.join(self.__firsts[key]) + "}, " + "Follows = {" + ', '.join(self.__follows[key]) + "}")
+            print(f'' + key + " => FIRSTS = {" + ', '.join(self.__firsts[key]) + "}, " + "FOLLOWS = {" + ', '.join(self.__follows[key]) + "}")
     # Gets --------------------------------------------------------------------------------------------------------
 
     def __getFirsts(self, key):

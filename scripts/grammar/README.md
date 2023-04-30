@@ -8,6 +8,7 @@ python terminal.py <flag> <textFile>
 Hay 2 maneras de pasar parametross
 - [Archivo de texto](#archivo-de-texto)
 - [Input manual](#input-manual)   
+- [Probar Todos los Archivos](#probar-todos-los-archivos)
 
 ---
 
@@ -32,4 +33,11 @@ TPrime -> * F TPrime
 TPrime -> ' '
 F -> ( E )
 F -> id
+```   
+
+### Probar Todos los Archivos
+```bash
+python terminal.py -a
 ```
+Dentro del directorio donde se encuentra main, debera existir una carpeta llamada inputs con los archivos de texto que se vayan a probar siguiendo el formato.   
+El script correra todas las pruebas.

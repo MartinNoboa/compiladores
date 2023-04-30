@@ -30,8 +30,9 @@ def main():
     # grammar.grammarToString()
     # grammar.terminalsToString()
     # grammar.nonTerminalsToString()
-    grammar.firstsToString()
+    # grammar.firstsToString()
     # grammar.followsToString()
+    grammar.firstsFollowsToString()
            
 if __name__ == "__main__":
     main()
