@@ -110,7 +110,7 @@ def testAll():
         # grammar.grammarToString()
         # grammar.terminalsToString()
         # grammar.nonTerminalsToString()
-        grammar.firstsToString()
-        grammar.followsToString()
-        # grammar.firstsFollowsToString()
+        # grammar.firstsToString()
+        # grammar.followsToString()
+        grammar.firstsFollowsToString()
     

@@ -69,7 +69,7 @@ class Grammar:
                     # next no es terminal
                     else:
                         # agregar first de next a follows
-                        follows.extend([i for i in self.__firsts[next] if i != 'eps'])
+                        follows.append([i for i in self.__firsts[next] if i != 'eps'])
                         # next produce epsilon
                         if self.__producesEpisolon(next):
                             # llamada recursiva con la lista y key = next
@@ -141,15 +141,15 @@ class Grammar:
             print(f'' + key + " = {" + ', '.join(self.__firsts[key]) + "}")
     
     def followsToString(self):
-        """ print("*"*3 + " Firsts " + "*"*3)
+        print("*"*3 + " Follows " + "*"*3)
         for key in self.__follows:
-            print(f'' + key + " = {" + ', '.join(self.__follows[key]) + "}") """
-        print(self.__follows)
+            print(f'' + key + " = {" + ', '.join(self.__follows[key]) + "}")
+        # print(self.__follows)
     
     def firstsFollowsToString(self):
         print("*"*3 + " Firsts & Follows" + "*"*3)
         for key in self.__firsts:
-            print(f'' + key + " => Firsts = {" + ', '.join(self.__firsts[key]) + "}")
+            print(f'' + key + " => Firsts = {" + ', '.join(self.__firsts[key]) + "}, " + "Follows = {" + ', '.join(self.__follows[key]) + "}")
     # Gets --------------------------------------------------------------------------------------------------------
 
     def __getFirsts(self, key):
