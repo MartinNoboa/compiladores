@@ -19,7 +19,7 @@ class Grammar:
     def build(self):
         self.__terminals()
         self.__setFirsts()
-        # self.__setFollows()
+        self.__setFollows()
         
     def __terminals(self):
         self.__terminal = [char for char in self.__terminal if char not in self.__nonTerminal and char != 'eps']
@@ -31,11 +31,11 @@ class Grammar:
                 return item
             else:
                 if item != 'eps':
-                    firsts.append(self.getFirst(item))
+                    firsts.extend(self.__getFirsts(item))
                     if self.__producesEpisolon(item):
                         if self.__hasNext(list,item):
-                            firsts.append(self.__recursiveFirst(self.__getNext(list, item)))
-                    firsts = [item for sublist in firsts for item in sublist]
+                            firsts.extend(self.__recursiveFirsts(self.__getNext(list, item)))
+                    # firsts = [item for sublist in firsts for item in sublist]
                     return firsts
                 else:
                     return 'eps'
@@ -54,45 +54,63 @@ class Grammar:
                     self.__firsts[key].append(firsts)
             self.__firsts[key] = list(dict.fromkeys(self.__firsts[key]))
     
+    def __recursiveFollow(self, list, key):
+        follows = []
+        for item in list:
+            if item == key:
+                # tiene next
+                if self.__hasNext(list, key):
+                    # obtener next
+                    next = self.__getNext(list, item)
+                    # next es terminal
+                    if next in self.__terminal:
+                        # devolver next
+                        return next
+                    # next no es terminal
+                    else:
+                        # agregar first de next a follows
+                        follows.extend([i for i in self.__firsts[next] if i != 'eps'])
+                        # next produce epsilon
+                        if self.__producesEpisolon(next):
+                            # llamada recursiva con la lista y key = next
+                            follows.append(self.__recursiveFollow(list, next)) 
+                        # follows = [item for sublist in follows for item in sublist]
+                        return follows
+                # no tiene next
+                else:
+                    # devolver follow de la key
+                    current_key = self.getKey(list) 
+                    if key != current_key and item != current_key:
+                        return self.__getFollows(current_key)
+                
     def __setFollows(self):
+        # initialize dictionary with non terminal keys
         for key in self.__nonTerminal:
             self.__follows[key] = []
-        self.__follows[self.__nonTerminal[0]].append('$')
-        for key in self.__follows:
-            for line in self.__grammar:
-                if key in line and line.index(key) != 0:
-                    if self.__hasNext(line,key):
-                        next = self.__getNext(line,key)
-                        ## is it non Terminal
-                        if next in self.__terminal:
-                            self.__follows[key].append(next)
+        self.__follows[list(self.__follows.keys())[0]].append('$')
+        for key in self.__grammar:
+            for productions in self.__grammar.values():
+                for production in (productions):
+                    if key in production:
+                        follows = self.__recursiveFollow(production, key)
+                        if type(follows) == list and follows != None:
+                            for i in follows:
+                                if i not in self.__follows[key]:
+                                    self.__follows[key].append(i)
                         else:
-                            # yes store firsts of next value
-                            self.__follows[key].extend(self.__firsts[next])
-                            # first of next value has eps
-                            if 'eps' in self.__firsts[next]:
-                                if self.__hasNext(line,next):
-                                    next = self.__getNext(line,next)
-                                    if next in self.__terminal:
-                                        self.__follows[key].append(next)
-                                    else:
-                                        # yes store firsts of next value
-                                        self.__follows[key].extend(self.__firsts[next])
-                    else:
-                        self.__follows[key].append(line[0])
-                        
-        # add follows 
-        for lines in reversed(self.__follows.values()):
-            for val in lines:
-                if val in self.__nonTerminal:
-                    lines.extend(self.__follows[val])
-                    lines.remove(val)
-        #remove doubles
+                            if follows != None and follows != '.':
+                                self.__follows[key].append(follows)
+            
+        
         for key in self.__follows:
-            self.__follows[key] = list(set(self.__follows[key]))
-        for lines in self.__follows.values():
-            if 'eps' in lines:
-                del lines[lines.index('eps')]
+            if None in self.__follows[key]:
+                self.__follows[key].remove(None)
+            for i in self.__follows[key]:
+                if type(i) == list:
+                    self.__follows[key] = [item for sublist in self.__follows[key] for item in sublist]
+            
+            # self.__follows[key] = list(dict.fromkeys(self.__follows[key]))
+        
             
     def __hasNext(self, list, value):
         return list.index(value) + 1 <= len(list) - 1
@@ -123,25 +141,27 @@ class Grammar:
             print(f'' + key + " = {" + ', '.join(self.__firsts[key]) + "}")
     
     def followsToString(self):
+        """ print("*"*3 + " Firsts " + "*"*3)
+        for key in self.__follows:
+            print(f'' + key + " = {" + ', '.join(self.__follows[key]) + "}") """
         print(self.__follows)
     
-    
+    def firstsFollowsToString(self):
+        print("*"*3 + " Firsts & Follows" + "*"*3)
+        for key in self.__firsts:
+            print(f'' + key + " => Firsts = {" + ', '.join(self.__firsts[key]) + "}")
     # Gets --------------------------------------------------------------------------------------------------------
-    def getTerminals(self):
-        return self.__terminal
-    
-    def getFirsts(self):
-        return self.__firsts
-    
-    def getFollows(self):
-        return self.__follows
-    
-    def getFirst(self, key):
+
+    def __getFirsts(self, key):
         if key in self.__nonTerminal:
             return self.__firsts[key] 
         else:
             return key
     
-    def getFollow(self, key):
-        return self.__follows[key] 
+    def __getFollows(self, key):
+        return self.__follows[key]
     
+    def getKey(self, list):
+        for key in self.__grammar:
+            if list in self.__grammar[key]:
+                return key

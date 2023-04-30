@@ -27,7 +27,7 @@ def main():
     grammar = Grammar(values, left, right)
     # build object
     grammar.build()
-    grammar.grammarToString()
+    # grammar.grammarToString()
     # grammar.terminalsToString()
     # grammar.nonTerminalsToString()
     grammar.firstsToString()

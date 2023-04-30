@@ -49,8 +49,6 @@ def parseContent(fileName):
     # read file values and convert to lists
     l = []
     r = []
-    values = {}
-    input = []
     grammar = {}
     with open(fileName) as f:
         n = int(f.readline().strip())
@@ -66,7 +64,6 @@ def parseContent(fileName):
     
     r = list(dict.fromkeys([item for sublist in r for item in sublist]))
     l = list(grammar.keys())
-    
     return l,r,grammar
 
 
@@ -114,4 +111,6 @@ def testAll():
         # grammar.terminalsToString()
         # grammar.nonTerminalsToString()
         grammar.firstsToString()
+        grammar.followsToString()
+        # grammar.firstsFollowsToString()
     
