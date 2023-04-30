@@ -18,40 +18,41 @@ class Grammar:
     # basics--------------------------------------------------------------------------------------------------
     def build(self):
         self.__terminals()
-        # self.__setProductions()
-        # self.__setFirsts()
+        self.__setFirsts()
         # self.__setFollows()
         
     def __terminals(self):
         self.__terminal = [char for char in self.__terminal if char not in self.__nonTerminal and char != 'eps']
-        
             
+    def __recursiveFirst(self, list):
+        firsts = []
+        for item in list:
+            if item in self.__terminal:
+                return item
+            else:
+                if item != 'eps':
+                    firsts.append(self.getFirst(item))
+                    if self.__producesEpisolon(item):
+                        if self.__hasNext(list,item):
+                            firsts.append(self.__recursiveFirst(self.__getNext(list, item)))
+                    firsts = [item for sublist in firsts for item in sublist]
+                    return firsts
+                else:
+                    return 'eps'
+                
     def __setFirsts(self):
         # initialize dictionary with non terminal keys
         for key in self.__nonTerminal:
             self.__firsts[key] = []
-        for i,line in enumerate(self.__grammar,start=1):
-            if line[1] in self.__terminal:
-                self.__firsts[line[0]].append(line[1])
-            else:
-                i = 1
-                while self.__hasNext(line,line[i]) and self.__producesEpisolon(line[i]):
-                    self.__firsts[line[0]].append(line[i])
-                    i += 1
-        # remove key from values
-        for value in self.__firsts:
-            if value in self.__firsts[value]:
-                self.__firsts[value].remove(value)
-        # remove non terminal from lists
-        for line in reversed(self.__firsts.values()):
-            for line in self.__firsts.values():
-                for i,value in enumerate(line):
-                    if value in self.__nonTerminal:
-                        line.extend(self.__firsts[value])
-                        del line[i]
-        #remove doubles
-        for key in self.__firsts:
-            self.__firsts[key] = list(set(self.__firsts[key]))
+        for key in reversed(self.__grammar):
+            for production in self.__grammar[key]:
+                firsts = self.__recursiveFirst(production)
+                if type(firsts) == list:
+                    for i in firsts:
+                        self.__firsts[key].append(i)
+                else:
+                    self.__firsts[key].append(firsts)
+            self.__firsts[key] = list(dict.fromkeys(self.__firsts[key]))
     
     def __setFollows(self):
         for key in self.__nonTerminal:
@@ -117,8 +118,9 @@ class Grammar:
                 print(f'' + i + ' -> ' + ' '.join(values))
     
     def firstsToString(self):
+        print("*"*3 + " Firsts " + "*"*3)
         for key in self.__firsts:
-            print(f'' + key + " -> " + ', '.join(self.__firsts[key]))
+            print(f'' + key + " = {" + ', '.join(self.__firsts[key]) + "}")
     
     def followsToString(self):
         print(self.__follows)
@@ -135,7 +137,10 @@ class Grammar:
         return self.__follows
     
     def getFirst(self, key):
-        return self.__firsts[key] 
+        if key in self.__nonTerminal:
+            return self.__firsts[key] 
+        else:
+            return key
     
     def getFollow(self, key):
         return self.__follows[key] 

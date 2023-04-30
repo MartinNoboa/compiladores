@@ -1,7 +1,7 @@
+from Grammar import *
 from distutils.command.clean import clean
-from os.path import exists
+from os.path import exists, os
 import collections
-import sys
 
         
 def parseArgv(arg):
@@ -31,7 +31,7 @@ def parseArgv(arg):
                     print("The file does not exist.")
                     exit()
         # flag -> user input 
-        elif(args['flag'] == '-i'):
+        elif(args['flag'] == '-i' or args['flag'] == '-a'):
                 return args
         else:
             print("Not a valid flag.")
@@ -96,3 +96,22 @@ def readInput():
     l = list(grammar.keys())
     
     return l,r,grammar
+
+
+def testAll():
+    testFiles = os.listdir('./inputs/')
+    # add script to read and compare result vs expected result
+    for i,testFile in enumerate(testFiles,start=1):
+        print("-" * 50)
+        print(f'Input {i}')
+        dir = "inputs/" + testFile
+        left, right, values = parseContent(dir)
+        # declare Grammar object
+        grammar = Grammar(values, left, right)
+        # build object 
+        grammar.build()
+        # grammar.grammarToString()
+        # grammar.terminalsToString()
+        # grammar.nonTerminalsToString()
+        grammar.firstsToString()
+    

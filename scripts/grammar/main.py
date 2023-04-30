@@ -8,45 +8,31 @@
 
 from Grammar import *
 from functions import *
-import os
+import sys
+
 
 def main():
     # check argv inputs
     args = parseArgv(sys.argv)
-    # get inputs
+    # get grammar
     if(args['flag'] == '-f'):
         left, right, values = parseContent(args['fileName'])
     elif(args['flag'] == '-i'):
         left , right, values = readInput()
+    elif(args['flag'] == '-a'):
+        testAll()
+        sys.exit()
     
     # declare Grammar object
     grammar = Grammar(values, left, right)
     # build object
     grammar.build()
     grammar.grammarToString()
-    # grammar.firstsToString()
+    # grammar.terminalsToString()
+    # grammar.nonTerminalsToString()
+    grammar.firstsToString()
     # grammar.followsToString()
-    
-    
-def testAll():
-    testFiles = os.listdir('./inputs/')
-    # add script to read and compare result vs expected result
-    for i,testFile in enumerate(testFiles,start=1):
-        print("-" * 50)
-        print(f'Input {i}')
-        dir = "inputs/" + testFile
-        left, right, values = parseContent(dir)
-        # declare Grammar object
-        grammar = Grammar(values, left, right)
-        # build object 
-        grammar.build()
-        # methods
-        
-        
-        # grammar.firstsToString()
-    
-                
+           
 if __name__ == "__main__":
     main()
-    # testAll()
             
