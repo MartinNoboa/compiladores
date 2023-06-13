@@ -1,0 +1,7 @@
+VAR X
+X := 10
+WHILE [X < 10] [
+    FD X
+    RT 90
+    X := X + 10
+]

@@ -1,0 +1,8 @@
+VAR Y, X
+Y := #f
+X := 10
+WHILE [!Y] [
+    PRINT [X]
+    X := X + 10
+    IF [X > 60] [Y := #t]
+]
